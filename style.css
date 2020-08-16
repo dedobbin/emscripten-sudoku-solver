@@ -1,0 +1,7 @@
+.sudoku-wrapper > div > span, .sudoku-wrapper > div {
+    padding: 10px;
+}
+
+.sudoku-wrapper {
+	display : inline-block;
+}
