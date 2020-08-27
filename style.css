@@ -5,3 +5,7 @@
 .sudoku-wrapper {
 	display : inline-block;
 }
+
+span.selected {
+	background-color: yellow;
+}

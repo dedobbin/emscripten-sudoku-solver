@@ -14,6 +14,8 @@
 	const solveSudoku = Module.cwrap("solveSudoku", "number", ["number"]); 
 	const initSolver = Module.cwrap("initSolver", "number", ["number"]); 
 
+	var sudoku;
+
 	function flat(sudoku){
 		const input = sudoku;
 		var output = [];
@@ -65,22 +67,30 @@
 	}
 
 	function displaySudoku(input, dstElement){
-		
 		while( dstElement.hasChildNodes() ){
 			dstElement.removeChild(dstElement.lastChild);
 		}
 		
-		var i = 0;
+		var x = 0, y =0;
 		input.forEach(row => {
 			var elemRow = document.createElement("div");
 			row.forEach(val => {
 				element = document.createElement("span");
-				element.setAttribute('data-cell', i++);
+				element.setAttribute('data-x', x++);
+				element.setAttribute('data-y', y);
 				element.innerText = val;
 				elemRow.append(element);
 			})
+			y++;
+			x = 0;
 			dstElement.append(elemRow);
 		});
+	}
+
+	function setSudokuClickListeners()
+	{
+		elem = document.getElementById("sudoku-wrapper");
+		
 	}
 
 	function printState(ptr)
@@ -125,13 +135,41 @@
 		Module._free(solutionPtr);
 
 	}
-	
-	Module.onRuntimeInitialized = function(){		
-		var sudoku = generateSudoku();
-		displaySudoku(sudoku, document.getElementById("sudoku-wrapper"));
+
+	function setupEventListeners(){
+		document.querySelectorAll("[data-x]").forEach(elem =>{
+			elem.addEventListener('click', e =>{
+				const selected = document.getElementsByClassName("selected");
+				if (selected.length > 0){
+					selected[0].classList.remove("selected");
+				}
+
+				
+				e.target.classList.add("selected");
+			})
+		})
+
+		document.addEventListener('keydown', (e) => {
+			if (e.keyCode  > 48 && e.keyCode < 58){
+				const selected = document.getElementsByClassName("selected")
+				if (selected.length > 0){
+					const selectedCell = selected[0];
+					const val =  e.keyCode - 48;
+					selectedCell.innerText = val;
+					sudoku[selectedCell.getAttribute('data-x')][selectedCell.getAttribute('data-y')] = val;
+					e.target.classList.remove("selected");
+				}
+			}
+		})
 
 		document.getElementById("solve-button").addEventListener('click', solve.bind(null, sudoku, false));
 		document.getElementById("steps-button").addEventListener('click',solve.bind(null, sudoku, true));
+	}
+	
+	Module.onRuntimeInitialized = function(){		
+		sudoku = generateSudoku();
+		displaySudoku(sudoku, document.getElementById("sudoku-wrapper"));
+		setupEventListeners();
 	}
 	
 	</script>
