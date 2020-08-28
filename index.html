@@ -40,29 +40,17 @@
 	}
 
 	function generateSudoku(){
-	const s = [
-		[0, 4, 0, 9, 0, 0, 3, 8, 0],
-		[6, 0, 0, 0, 0, 0, 0, 9, 0],
-		[2, 9, 0, 3, 7, 4, 5, 0, 0],
-		[0, 1, 7, 0, 9, 6, 0, 2, 3],
-		[0, 0, 0, 2, 0, 0, 0, 5, 4],
-		[8, 0, 4, 7, 0, 0, 0, 0, 0],
-		[0, 0, 2, 5, 3, 0, 9, 0, 8],
-		[4, 0, 0, 0, 2, 7, 6, 0, 1],
-		[0, 8, 1, 0, 0, 0, 2, 7, 0],
-	]
-		//impossible puzzle for testing
-//		const s = [
-//			[1, 4, 1, 9, 1, 1, 3, 8, 0],
-//			[6, 0, 0, 0, 0, 0, 1, 9, 0],
-//			[2, 9, 0, 3, 7, 4, 5, 0, 0],
-//			[0, 1, 7, 0, 9, 6, 1, 2, 3],
-//			[0, 0, 0, 2, 0, 1, 1, 5, 4],
-//			[8, 0, 4, 7, 0, 1, 1, 0, 0],
-//			[0, 0, 2, 5, 3, 1, 9, 0, 8],
-//			[4, 0, 0, 0, 2, 7, 6, 0, 1],
-//			[0, 8, 1, 0, 0, 0, 2, 7, 0],
-//		]
+		const s = [
+			[0, 4, 0, 9, 0, 0, 3, 8, 0],
+			[6, 0, 0, 0, 0, 0, 0, 9, 0],
+			[2, 9, 0, 3, 7, 4, 5, 0, 0],
+			[0, 1, 7, 0, 9, 6, 0, 2, 3],
+			[0, 0, 0, 2, 0, 0, 0, 5, 4],
+			[8, 0, 4, 7, 0, 0, 0, 0, 0],
+			[0, 0, 2, 5, 3, 0, 9, 0, 8],
+			[4, 0, 0, 0, 2, 7, 6, 0, 1],
+			[0, 8, 1, 0, 0, 0, 2, 7, 0],
+		];
 		return s;
 	}
 
@@ -123,10 +111,17 @@
 
 		const solutionPtr = initSolver(ptr);
 
+		var t0 = +new Date();
+		const result = solveSudoku(fnPtr);
+		var t1 = +new Date();
+
 		var solution = [];
-		if (!solveSudoku(fnPtr)){
+		if (!result){
+			document.getElementById("done").innerText = "Impossible";
 			document.getElementById("solution-wrapper").style.color = "red";
 		} else {
+			//console.log(t1 - t0);
+			document.getElementById("done").innerText = "Solved";
 			document.getElementById("solution-wrapper").style.color = "green";
 		}
 		printState(solutionPtr);
@@ -144,20 +139,31 @@
 					selected[0].classList.remove("selected");
 				}
 
-				
 				e.target.classList.add("selected");
 			})
 		})
 
 		document.addEventListener('keydown', (e) => {
-			if (e.keyCode  > 48 && e.keyCode < 58){
+			if (e.keyCode  > 47 && e.keyCode < 58){
 				const selected = document.getElementsByClassName("selected")
 				if (selected.length > 0){
 					const selectedCell = selected[0];
 					const val =  e.keyCode - 48;
 					selectedCell.innerText = val;
 					sudoku[selectedCell.getAttribute('data-x')][selectedCell.getAttribute('data-y')] = val;
-					e.target.classList.remove("selected");
+					selectedCell.classList.remove("selected");		
+					
+					//select next cell when number was entered
+					let x = selectedCell.getAttribute("data-x");
+					let y = selectedCell.getAttribute("data-y");
+					if (x == 8){
+						y ++;
+						x = 0;
+					} else {
+						x ++;
+					}
+					const next = document.querySelector('[data-x="' + x + '"][data-y="' + y + '"]');
+					next.classList.add('selected');
 				}
 			}
 		})
@@ -180,7 +186,8 @@
 	<button id="steps-button">show steps</button>
 	<button id="solve-button">solve</button> 
 	<br/>
-	(showing steps requires open debugger)
+	<div>(showing steps requires open debugger)</div> <br/>
+	<div id = "done"></div>
 
 </body>
 </html>

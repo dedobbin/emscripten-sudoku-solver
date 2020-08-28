@@ -87,25 +87,10 @@ int go(uint32_t* ptr, uint32_t pos, int drawCallback)
 	return 0;
 }
 
-// int posToIndex(int x, int y, int w, int h)
-// {
-// 	return x + y * w;
-// }
-
-// void indexToPos(int index, int w, int h, int * const output)
-// {
-// 	output[0] = index / w;
-// 	output[1] = index % w;
-// }
-
 
 EMSCRIPTEN_KEEPALIVE
-uint32_t solveSudoku(int drawCallback){
-	// int index = 0 + 9 * 0;
-	// int val = 2;
-	// isLegal(ptr, w, h, index, val, 1);
-	// ptr[index] = val *-1;
-
+uint32_t solveSudoku(int drawCallback)
+{
 	if (go(sudoku, 0, drawCallback)){
 		//printf("solved\n");
 		return 1;
@@ -124,3 +109,13 @@ uint32_t* initSolver(const uint32_t* const ptr)
 	return sudoku;
 }
 
+// int posToIndex(int x, int y, int w, int h)
+// {
+// 	return x + y * w;
+// }
+
+// void indexToPos(int index, int w, int h, int * const output)
+// {
+// 	output[0] = index / w;
+// 	output[1] = index % w;
+// }
