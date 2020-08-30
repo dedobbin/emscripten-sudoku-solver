@@ -1,11 +1,70 @@
+.sudoku-wrapper {
+    margin-right: 64px;
+}
+
+.sudoku-wrapper span {
+	border: thin solid #FF00FF;
+}
+
 .sudoku-wrapper > div > span, .sudoku-wrapper > div {
-    padding: 10px;
+	padding: 10px;
+	font-size: 20px;
+	background-color:white;
+}
+
+.sudoku-wrapper .s-row {
+    padding: 10px 0px;
 }
 
 .sudoku-wrapper {
 	display : inline-block;
 }
 
-span.selected {
+.sudoku-wrapper span.selected {
 	background-color: yellow;
+}
+
+div#content {
+	padding: 0 0 65px 50px;
+	text-align:center;
+}
+
+div#content > div, div#content{
+	min-width: 790px;
+}
+
+#status > * {
+    display: inline;
+}
+
+#status {
+	padding: 15px 0 15px 0;
+	font-weight: bold;
+	margin: 5px 0 15px 0;
+	font-weight: bold;
+	display: inline-block;
+	padding: 9px;
+	text-align: left;
+}
+
+#github-link img {
+	width: 20px;
+	background-color: white;
+	border-radius: 72%;
+	position: relative;
+	top: 1px;
+}
+
+#title > * {
+    display: inline-block;
+}
+
+#title h2 {
+    padding: 0 15px 0 0;
+}
+
+body {
+	/* thanks heropatterns.com/ */
+	background-color: #ffffff;
+	background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff00ff' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
 }

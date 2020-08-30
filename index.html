@@ -3,14 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WASM Demo</title>
+    <title>Sudoku solver</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 	<script src="main.js"></script>
     <script>
-
 	const solveSudoku = Module.cwrap("solveSudoku", "number", ["number"]); 
 	const initSolver = Module.cwrap("initSolver", "number", ["number"]); 
 
@@ -59,15 +58,32 @@
 			dstElement.removeChild(dstElement.lastChild);
 		}
 		
+		const areaBorderStyle = "thick solid #FF00FF";
 		var x = 0, y =0;
 		input.forEach(row => {
 			var elemRow = document.createElement("div");
+			elemRow.classList.add("s-row");
 			row.forEach(val => {
 				element = document.createElement("span");
-				element.setAttribute('data-x', x++);
+				element.setAttribute('data-x', x);
 				element.setAttribute('data-y', y);
 				element.innerText = val;
+
+				if (x == 0 || x == 3 || x == 6){
+					element.style.borderLeft = areaBorderStyle;
+				} else if (x == 8){
+					element.style.borderRight = areaBorderStyle;
+				}
+
+				if (y == 0 || y == 3 || y == 6){
+					element.style.borderTop = areaBorderStyle;
+				} else if (y==8){
+					element.style.borderBottom = areaBorderStyle;
+				}
+
+
 				elemRow.append(element);
+				x++;
 			})
 			y++;
 			x = 0;
@@ -77,8 +93,7 @@
 
 	function setSudokuClickListeners()
 	{
-		elem = document.getElementById("sudoku-wrapper");
-		
+		elem = document.getElementById("sudoku-wrapper");	
 	}
 
 	function printState(ptr)
@@ -92,6 +107,9 @@
 	}
 
 	function solve(sudoku, showSteps = false){
+		if (showSteps){
+			alert("To see step for step, open dev tools and press ok");
+		}
 		const len = 81;
 		const input = flat(sudoku);
 
@@ -117,11 +135,11 @@
 
 		var solution = [];
 		if (!result){
-			document.getElementById("done").innerText = "Impossible";
+			document.getElementById("status").innerText = "Impossible";
 			document.getElementById("solution-wrapper").style.color = "red";
 		} else {
 			//console.log(t1 - t0);
-			document.getElementById("done").innerText = "Solved";
+			document.getElementById("status").innerText = "Solved";
 			document.getElementById("solution-wrapper").style.color = "green";
 		}
 		printState(solutionPtr);
@@ -175,19 +193,25 @@
 	Module.onRuntimeInitialized = function(){		
 		sudoku = generateSudoku();
 		displaySudoku(sudoku, document.getElementById("sudoku-wrapper"));
+		displaySudoku(sudoku, document.getElementById("solution-wrapper"));
 		setupEventListeners();
 	}
 	
 	</script>
-	<div>
-		<div id=sudoku-wrapper class=sudoku-wrapper></div>
-		<div id=solution-wrapper class=sudoku-wrapper></div>
+	<div id="content">
+		<span id="title">
+			<h2>WASM powered Sudoku solver</h2>
+			<div id="github-link"><a href="https://github.com/dedobbin/emscripten-sudoku-solver" target="_blank"><img src="github.webp"/></a></div>
+		</span>
+		<div>
+			<div id=sudoku-wrapper class=sudoku-wrapper></div>
+			<div id=solution-wrapper class=sudoku-wrapper></div>
+		</div>
+		<div id="status">
+			<button id="solve-button">solve</button> 
+			<button id="steps-button">show steps</button>
+		</div>
 	</div>
-	<button id="steps-button">show steps</button>
-	<button id="solve-button">solve</button> 
-	<br/>
-	<div>(showing steps requires open debugger)</div> <br/>
-	<div id = "done"></div>
 
 </body>
 </html>
