@@ -68,6 +68,9 @@
 				element.setAttribute('data-x', x);
 				element.setAttribute('data-y', y);
 				element.innerText = val;
+				if (val == 0){
+					element.style.color = 'transparent'
+				}
 
 				if (x == 0 || x == 3 || x == 6){
 					element.style.borderLeft = areaBorderStyle;
@@ -150,7 +153,7 @@
 	}
 
 	function setupEventListeners(){
-		document.querySelectorAll("[data-x]").forEach(elem =>{
+		document.querySelectorAll("#sudoku-wrapper [data-x]").forEach(elem =>{
 			elem.addEventListener('click', e =>{
 				const selected = document.getElementsByClassName("selected");
 				if (selected.length > 0){
@@ -162,12 +165,20 @@
 		})
 
 		document.addEventListener('keydown', (e) => {
-			if (e.keyCode  > 47 && e.keyCode < 58){
+			//Check if number of backspace. 0 and backspace both will result in cell displayed empty
+			if (e.keyCode  > 47 && e.keyCode < 58 || e.keyCode == 8){
 				const selected = document.getElementsByClassName("selected")
 				if (selected.length > 0){
 					const selectedCell = selected[0];
-					const val =  e.keyCode - 48;
+					const val =  e.keyCode != 8 ? e.keyCode - 48 : 0;
 					selectedCell.innerText = val;
+
+					if (val == 0){
+						selectedCell.style.color = 'transparent';
+					} else {
+						selectedCell.style.color = 'black';
+					}
+
 					sudoku[selectedCell.getAttribute('data-x')][selectedCell.getAttribute('data-y')] = val;
 					selectedCell.classList.remove("selected");		
 					
