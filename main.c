@@ -11,8 +11,8 @@ int isLegal(const uint32_t* const ptr, int index, int val, int print)
 {
 	int w = 9;
 	int h = 9;
-	int x = index / w;
-	int y = index % w;	
+	int x = index % w;
+	int y = index / w;	
 
 	print && printf("try %d at %d,%d: ",val, x, y);
 
