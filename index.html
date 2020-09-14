@@ -15,24 +15,23 @@
 
 	var sudoku;
 
-	function flat(sudoku){
-		const input = sudoku;
+	function flat(input){
 		var output = [];
-		input.forEach( row =>{
-			row.forEach(val =>{
-				output.push(val);
-			})
-		})
+		for (let x = 0; x < input.length; x++){
+			for (let y = 0; y < input[x].length; y++){
+				output.push(input[x][y]);
+			}
+		}
 		return output;
 	}
 
 	function blowup(input, w, h){
 		var output = [];
 		var i = 0;
-		for (var x = 0; x < w; x++){
+		for (var y = 0; y < h; y++){
 			output.push([])
-			for (var y = 0; y < h; y++){
-				output[x].push(input[i++]);
+			for (var x = 0; x < h; x++){
+				output[y].push(input[i++]);
 			}
 		}
 		return output;
@@ -179,7 +178,7 @@
 						selectedCell.style.color = 'black';
 					}
 
-					sudoku[selectedCell.getAttribute('data-x')][selectedCell.getAttribute('data-y')] = val;
+					sudoku[selectedCell.getAttribute('data-y')][selectedCell.getAttribute('data-x')] = val;
 					selectedCell.classList.remove("selected");		
 					
 					//select next cell when number was entered
